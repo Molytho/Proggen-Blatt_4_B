@@ -4,10 +4,10 @@ import java.util.Dictionary;
 import java.util.Objects;
 
 public class MainLoop<T> {
+    private static final String COMMAND_NOT_FOUND = "Error, command not found";
     private final Dictionary<String, Command<T>> commands;
     private final CommandManager.ArgumentParser parser;
     private final MainLoopHandle handleSingleton;
-    private final String COMMAND_NOT_FOUND = "Error, command not found";
     private boolean run;
 
     public MainLoop(CommandManager<T> commandManager) {

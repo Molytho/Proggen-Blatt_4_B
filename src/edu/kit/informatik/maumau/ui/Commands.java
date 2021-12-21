@@ -19,14 +19,14 @@ import java.util.regex.Pattern;
 public enum Commands implements Command<GameControllerInterface> {
     START {
         private static final String REGEX_STRING = "^[0-9]+$";
-        private final Pattern REGEX_PATTERN = Pattern.compile(REGEX_STRING);
+        private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle,
                                UserInterface userInterface, GameControllerInterface game, String args) {
             Matcher matcher;
             if (args == null
-                || !(matcher = REGEX_PATTERN.matcher(args)).matches()) {
+                || !(matcher = regexPattern.matcher(args)).matches()) {
                 userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
                 return false;
             }
@@ -47,7 +47,7 @@ public enum Commands implements Command<GameControllerInterface> {
     },
     SHOW {
         private static final String REGEX_STRING = "^(game|[1-4])$";
-        private final Pattern REGEX_PATTERN = Pattern.compile(REGEX_STRING);
+        private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         private boolean executeGameSubcommand(UserInterface userInterface,
                                               GameControllerInterface game) {
@@ -94,7 +94,7 @@ public enum Commands implements Command<GameControllerInterface> {
                                GameControllerInterface game, String args) {
             Matcher matcher;
             if (args == null
-                || !(matcher = REGEX_PATTERN.matcher(args)).matches()) {
+                || !(matcher = regexPattern.matcher(args)).matches()) {
                 userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
                 return false;
             }
@@ -114,14 +114,14 @@ public enum Commands implements Command<GameControllerInterface> {
     },
     DISCARD {
         private static final String REGEX_STRING = "^([1-4]) ([7-9BDKA]|10)([ELHS])$";
-        private final Pattern REGEX_PATTERN = Pattern.compile(REGEX_STRING);
+        private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
                                GameControllerInterface game, String args) {
             Matcher matcher;
             if (args == null
-                || !(matcher = REGEX_PATTERN.matcher(args)).matches()) {
+                || !(matcher = regexPattern.matcher(args)).matches()) {
                 userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
                 return false;
             }
@@ -156,14 +156,14 @@ public enum Commands implements Command<GameControllerInterface> {
     },
     PICK {
         private static final String REGEX_STRING = "^([1-4])$";
-        private final Pattern REGEX_PATTERN = Pattern.compile(REGEX_STRING);
+        private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
                                GameControllerInterface game, String args) {
             Matcher matcher;
             if (args == null
-                || !(matcher = REGEX_PATTERN.matcher(args)).matches()) {
+                || !(matcher = regexPattern.matcher(args)).matches()) {
                 userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
                 return false;
             }
@@ -205,9 +205,9 @@ public enum Commands implements Command<GameControllerInterface> {
         }
     };
 
-    private final static String TOO_MANY_ARGUMENTS = "Error, too many arguments where given";
-    private final static String INVALID_ARGUMENT_FORMAT = "Error, argument(s) has/have bad format.";
-    private final static String NUMBER_TOO_LONG = "Error, the given number was too long.";
-    private final static String PLAYER_WON = "Game over: Player %d has won.";
-    private final static String DRAW_MESSAGE = "Game over: Draw.";
+    private static final String TOO_MANY_ARGUMENTS = "Error, too many arguments where given";
+    private static final String INVALID_ARGUMENT_FORMAT = "Error, argument(s) has/have bad format.";
+    private static final String NUMBER_TOO_LONG = "Error, the given number was too long.";
+    private static final String PLAYER_WON = "Game over: Player %d has won.";
+    private static final String DRAW_MESSAGE = "Game over: Draw.";
 }

@@ -2,10 +2,11 @@ package edu.kit.informatik.maumau.game;
 
 import java.util.Objects;
 
-public class Deck {
-    private final static int COUNT_OF_VALUES = 8;
-    private final static int COUNT_OF_FAMILIES = 4;
-    private final static int COUNT_OF_CARDS = COUNT_OF_FAMILIES * COUNT_OF_VALUES;
+public final class Deck {
+    private static final int COUNT_OF_VALUES = 8;
+    private static final int COUNT_OF_FAMILIES = 4;
+    private static final int COUNT_OF_CARDS = COUNT_OF_FAMILIES * COUNT_OF_VALUES;
+    private static Deck instance = null;
     private final Card[] cards;
 
     private Deck() {
@@ -33,7 +34,6 @@ public class Deck {
         return new CardStack(cards.clone(), seed);
     }
 
-    private static Deck instance = null;
     public static Deck getInstance() {
         return Objects.isNull(instance) ? instance = new Deck() : instance;
     }

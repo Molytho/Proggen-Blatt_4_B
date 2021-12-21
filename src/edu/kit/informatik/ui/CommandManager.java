@@ -4,6 +4,7 @@ import java.util.Dictionary;
 
 public interface CommandManager<T> {
     Dictionary<String, Command<T>> getCommands();
+
     ArgumentParser getArgumentParser();
 
     interface ArgumentParser {
