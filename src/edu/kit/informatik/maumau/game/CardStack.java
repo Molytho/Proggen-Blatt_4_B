@@ -12,6 +12,10 @@ public class CardStack {
     CardStack(Card[] cards, long seed) {
         List<Card> cardList = Arrays.asList(cards);
         Collections.shuffle(cardList, new Random(seed));
+        // Stack gibt die Elemente in umgekehrter Reihenfolge zurück.
+        // Das wäre zwar logisch komplett irrelevant aber könnte Probleme mit
+        // Artemis auslösen, also einmal invertieren.
+        Collections.reverse(cardList);
         stack = new Stack<>();
         stack.addAll(cardList);
     }

@@ -2,12 +2,9 @@ package edu.kit.informatik.maumau.ui;
 
 import edu.kit.informatik.maumau.game.GameControllerInterface;
 import edu.kit.informatik.ui.Command;
-import edu.kit.informatik.ui.FormatException;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Locale;
 
 public class CommandManager implements edu.kit.informatik.ui.CommandManager<GameControllerInterface> {
     private final Dictionary<String, Command<GameControllerInterface>> commandMap;
@@ -17,7 +14,7 @@ public class CommandManager implements edu.kit.informatik.ui.CommandManager<Game
         commandMap = new Hashtable<>(commands.length);
 
         for (Commands command : commands) {
-            commandMap.put(command.name().toLowerCase(Locale.ROOT), command);
+            commandMap.put(command.name().toLowerCase(), command);
         }
     }
 
