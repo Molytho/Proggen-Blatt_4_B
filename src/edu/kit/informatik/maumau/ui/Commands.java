@@ -208,6 +208,6 @@ public enum Commands implements Command<GameControllerInterface> {
     private final static String TOO_MANY_ARGUMENTS = "Error, too many arguments where given";
     private final static String INVALID_ARGUMENT_FORMAT = "Error, argument(s) has/have bad format.";
     private final static String NUMBER_TOO_LONG = "Error, the given number was too long.";
-    private final static String PLAYER_WON = "Game over : Player %d has won.";
-    private final static String DRAW_MESSAGE = "Game over : Draw.";
+    private final static String PLAYER_WON = "Game over: Player %d has won.";
+    private final static String DRAW_MESSAGE = "Game over: Draw.";
 }
