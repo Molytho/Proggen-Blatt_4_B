@@ -20,6 +20,7 @@ public enum Commands implements Command<GameControllerInterface> {
     START {
         private static final String REGEX_STRING = "^[0-9]+$";
         private final Pattern REGEX_PATTERN = Pattern.compile(REGEX_STRING);
+
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle,
                                UserInterface userInterface, GameControllerInterface game, String args) {
@@ -38,12 +39,7 @@ public enum Commands implements Command<GameControllerInterface> {
                 return false;
             }
 
-            try {
-                game.startGame(seed);
-            } catch (InvalidGameStateException e) {
-                userInterface.printOutput(e.getMessage());
-                return false;
-            }
+            game.startGame(seed);
 
             userInterface.printOutput("Player 1 takes the turn.");
             return true;

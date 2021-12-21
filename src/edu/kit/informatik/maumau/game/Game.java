@@ -62,10 +62,7 @@ public class Game implements GameControllerInterface {
     }
 
     @Override
-    public void startGame(long seed) throws InvalidGameStateException {
-        if(isRunning()) {
-            throw new InvalidGameStateException("Error, the game is already running!");
-        }
+    public void startGame(long seed) {
         cardStack = Deck.getInstance().createStack(seed);
         discardStack = new CardStack();
         players = new Player[COUNT_OF_PLAYERS];
