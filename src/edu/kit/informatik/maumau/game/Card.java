@@ -22,8 +22,7 @@ public class Card implements Comparable<Card> {
     public int compareTo(Card other) {
         Objects.requireNonNull(other);
 
-        int comparedValueResult = value.compareTo(other.value);
-        return comparedValueResult == 0 ? family.getName() - other.family.getName() : comparedValueResult;
+        return this.toString().compareTo(other.toString());
     }
 
     @Override
