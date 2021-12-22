@@ -1,7 +1,6 @@
 package edu.kit.informatik.maumau.game;
 
 import edu.kit.informatik.maumau.game.exceptions.InvalidGameStateException;
-import edu.kit.informatik.maumau.game.exceptions.NotThePlayersTurnException;
 import edu.kit.informatik.maumau.game.exceptions.RuleException;
 
 import java.util.Objects;
@@ -37,9 +36,9 @@ public class Game implements GameControllerInterface {
         }
     }
 
-    private void ensurePlayersTurn(int playerId) throws NotThePlayersTurnException {
+    private void ensurePlayersTurn(int playerId) throws RuleException {
         if (playerId != currentPlayer + 1) {
-            throw new NotThePlayersTurnException(String.format("Error, player %d's turn", currentPlayer + 1));
+            throw new RuleException(String.format("Error, player %d's turn", currentPlayer + 1));
         }
     }
 

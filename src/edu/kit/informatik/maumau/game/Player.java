@@ -1,7 +1,5 @@
 package edu.kit.informatik.maumau.game;
 
-import edu.kit.informatik.maumau.game.exceptions.CardNotAllowedException;
-import edu.kit.informatik.maumau.game.exceptions.IllegalMoveException;
 import edu.kit.informatik.maumau.game.exceptions.InvalidGameStateException;
 import edu.kit.informatik.maumau.game.exceptions.RuleException;
 
@@ -30,10 +28,10 @@ public class Player implements Iterable<Card> {
     void doDiscard(Card card) throws InvalidGameStateException, RuleException {
         Objects.requireNonNull(card);
         if (!cardsOnHand.contains(card)) {
-            throw new IllegalMoveException("Error, card not on the hand of the player");
+            throw new RuleException("Error, card not on the hand of the player");
         }
         if (!gameController.getCurrentCard().isCompatible(card)) {
-            throw new CardNotAllowedException("Error, the given card is not compatible with the top of the stack");
+            throw new RuleException("Error, the given card is not compatible with the top of the stack");
         }
 
         gameController.discardCard(card);
@@ -42,11 +40,11 @@ public class Player implements Iterable<Card> {
         reportWonIfNeeded();
     }
 
-    void doDraw() throws InvalidGameStateException, IllegalMoveException {
+    void doDraw() throws InvalidGameStateException, RuleException {
         Card currentCard = gameController.getCurrentCard();
         for (Card card : this) {
             if (card.isCompatible(currentCard)) {
-                throw new IllegalMoveException("Error, you can do a move. You are not allowed to draw.");
+                throw new RuleException("Error, you can do a move. You are not allowed to draw.");
             }
         }
 

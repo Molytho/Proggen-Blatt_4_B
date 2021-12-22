@@ -6,9 +6,19 @@ import edu.kit.informatik.ui.Command;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+/**
+ * Modelliert den für die MainLoop gebrauchten CommandManager für das MauMau Spiel
+ *
+ * @author urqyv
+ * @version 1.0
+ */
 public class CommandManager implements edu.kit.informatik.ui.CommandManager<GameControllerInterface> {
     private final Dictionary<String, Command<GameControllerInterface>> commandMap;
 
+    /**
+     * Erstellt ein neues CommandManager Objekt.
+     * Bei der Erstellung werden die Befehle mit Hilfe des {@link Commands} Enums initialisiert.
+     */
     public CommandManager() {
         Commands[] commands = Commands.values();
         commandMap = new Hashtable<>(commands.length);
@@ -19,8 +29,8 @@ public class CommandManager implements edu.kit.informatik.ui.CommandManager<Game
     }
 
     @Override
-    public Dictionary<String, Command<GameControllerInterface>> getCommands() {
-        return commandMap;
+    public Command<GameControllerInterface> getCommand(String name) {
+        return commandMap.get(name);
     }
 
     @Override
@@ -28,6 +38,9 @@ public class CommandManager implements edu.kit.informatik.ui.CommandManager<Game
         return new Parser();
     }
 
+    /**
+     * Implementiert den {@link edu.kit.informatik.ui.CommandManager.ArgumentParser} für das MauMau Spiel.
+     */
     private class Parser implements ArgumentParser {
         @Override
         public String[] parse(String input) {
