@@ -155,7 +155,7 @@ public enum Commands implements Command<GameControllerInterface> {
         }
     },
     PICK {
-        private static final String REGEX_STRING = "^([1-4])$";
+        private static final String REGEX_STRING = "^[1-4]$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
