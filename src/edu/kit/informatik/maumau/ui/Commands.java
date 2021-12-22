@@ -13,21 +13,31 @@ import edu.kit.informatik.ui.Command;
 import edu.kit.informatik.ui.MainLoop;
 import edu.kit.informatik.ui.UserInterface;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Implementiert die Kommandozeilenbefehle die beim MauMau Spiel ausgeführt werden können
+ *
+ * @author urqyv
+ * @version 1.0
+ */
 public enum Commands implements Command<GameControllerInterface> {
+    /**
+     * Implementiert den "start <seed>" Befehl.
+     * Als seed sind long-Werte erlaubt.
+     */
     START {
+        //Prüft, ob die Eingabe eine Zahl ist
         private static final String REGEX_STRING = "^[0-9]+$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle,
                                UserInterface userInterface, GameControllerInterface game, String args) {
-            Matcher matcher;
-            if (args == null
-                || !(matcher = regexPattern.matcher(args)).matches()) {
-                userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+            Matcher matcher = checkAndPromptInvalidArguments(userInterface, regexPattern, args);
+            if (matcher == null) {
                 return false;
             }
 
@@ -45,7 +55,12 @@ public enum Commands implements Command<GameControllerInterface> {
             return true;
         }
     },
+    /**
+     * Implementiert den "show <game|Spielernummer>" Befehl.
+     * Als Argument sind das Wort "game" oder eine Zahl von 1 bis einschließlich 4 erlaubt.
+     */
     SHOW {
+        // Prüft, ob die Eingabe "game" oder eine Zahl von 1 bis 4 ist.
         private static final String REGEX_STRING = "^game|[1-4]$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
@@ -61,30 +76,31 @@ public enum Commands implements Command<GameControllerInterface> {
                 return false;
             }
             userInterface.printOutput(stringBuilder.toString());
+
             return true;
         }
 
         private boolean executeDefault(UserInterface userInterface,
                                        GameControllerInterface game, Matcher argumentMatcher) {
+            Player player;
             try {
+                // Hier sollte nie eine NumberFormatException geworfen werden, da das Regex
+                // sowohl Format, als auch Größe der Zahl überprüft.
                 int playerId = Integer.parseInt(argumentMatcher.group(0));
-                Player player = game.getPlayerWithId(playerId);
-
-                StringBuilder stringBuilder = new StringBuilder();
-                for (Card cardOnHand : player) {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(',');
-                    }
-                    stringBuilder.append(cardOnHand);
-                }
-                userInterface.printOutput(stringBuilder.toString());
-            } catch (NumberFormatException ex) {
-                userInterface.printOutput(NUMBER_TOO_LONG);
-                return false;
+                player = game.getPlayerWithId(playerId);
             } catch (InvalidGameStateException ex) {
                 userInterface.printOutput(ex.getMessage());
                 return false;
             }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Card cardOnHand : player) {
+                if (stringBuilder.length() > 0) {
+                    stringBuilder.append(',');
+                }
+                stringBuilder.append(cardOnHand);
+            }
+            userInterface.printOutput(stringBuilder.toString());
 
             return true;
         }
@@ -92,14 +108,12 @@ public enum Commands implements Command<GameControllerInterface> {
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
                                GameControllerInterface game, String args) {
-            Matcher matcher;
-            if (args == null
-                || !(matcher = regexPattern.matcher(args)).matches()) {
-                userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+            Matcher matcher = checkAndPromptInvalidArguments(userInterface, regexPattern, args);
+            if (matcher == null) {
                 return false;
             }
-            String firstArgument = matcher.group(0);
 
+            String firstArgument = matcher.group(0);
             boolean returnValue;
             switch (firstArgument) {
                 case "game":
@@ -112,34 +126,33 @@ public enum Commands implements Command<GameControllerInterface> {
             return returnValue;
         }
     },
+    /**
+     * Implementiert den "discard <Spielernummer> <Karte>" Befehl.
+     */
     DISCARD {
+        // Erlaubte Eingaben sind:
+        // Zahl von 1 bis 4
+        // + Leerzeichen
+        // + Zahl von 7 bis 10 oder B, D, K oder A
+        // + E, L, H oder S
         private static final String REGEX_STRING = "^([1-4]) ([7-9BDKA]|10)([ELHS])$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
                                GameControllerInterface game, String args) {
-            Matcher matcher;
-            if (args == null
-                || !(matcher = regexPattern.matcher(args)).matches()) {
-                userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+            Matcher matcher = checkAndPromptInvalidArguments(userInterface, regexPattern, args);
+            if (matcher == null) {
                 return false;
             }
 
-            int playerId;
-            CardValue cardValue;
-            CardFamily cardFamily;
-            try {
-                playerId = Integer.parseInt(matcher.group(1));
-                cardValue = CardValue.fromString(matcher.group(2));
-                cardFamily = CardFamily.fromString(matcher.group(3));
-            } catch (NumberFormatException ex) {
-                // Ich hab keine Ahnung wie das passieren sollte. Dann muss mein Regex kaputt sein ._.
-                throw new IllegalStateException(ex);
-            }
+            // Hier kann keine NumberFormatException geworfen werden da sowohl Format als auch Größe der Eingabe
+            // schon geprüft sind.
+            int playerId = Integer.parseInt(matcher.group(1));
+            CardValue cardValue = CardValue.fromString(matcher.group(2));
+            CardFamily cardFamily = CardFamily.fromString(matcher.group(3));
 
-            Deck deck = Deck.getInstance();
-            Card card = deck.getCard(cardFamily, cardValue);
+            Card card = Deck.getInstance().getCard(cardFamily, cardValue);
             try {
                 game.doPlayerDiscard(playerId, card);
             } catch (InvalidGameStateException | RuleException e) {
@@ -154,29 +167,24 @@ public enum Commands implements Command<GameControllerInterface> {
             return true;
         }
     },
+    /**
+     * Implementiert den "pick <Spielernummer>" Befehl.
+     */
     PICK {
+        // Prüft auf Zahlen von 1 bis 4
         private static final String REGEX_STRING = "^[1-4]$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
                                GameControllerInterface game, String args) {
-            Matcher matcher;
-            if (args == null
-                || !(matcher = regexPattern.matcher(args)).matches()) {
-                userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+            Matcher matcher = checkAndPromptInvalidArguments(userInterface, regexPattern, args);
+            if (matcher == null) {
                 return false;
             }
 
-            int playerId;
             try {
-                playerId = Integer.parseInt(matcher.group(0));
-            } catch (NumberFormatException e) {
-                // Ich versteh irgendwas an Regex falsch.
-                throw new IllegalStateException(e);
-            }
-
-            try {
+                int playerId = Integer.parseInt(matcher.group(0));
                 game.doPlayerDraw(playerId);
             } catch (InvalidGameStateException | RuleException e) {
                 userInterface.printOutput(e.getMessage());
@@ -190,6 +198,10 @@ public enum Commands implements Command<GameControllerInterface> {
             return true;
         }
     },
+    /**
+     * Implementiert den "quit" Befehl.
+     * Beendet die Hauptschleife.
+     */
     QUIT {
         @Override
         public boolean execute(MainLoop<GameControllerInterface>.MainLoopHandle loopHandle, UserInterface userInterface,
@@ -210,4 +222,20 @@ public enum Commands implements Command<GameControllerInterface> {
     private static final String NUMBER_TOO_LONG = "Error, the given number was too long.";
     private static final String PLAYER_WON = "Game over: Player %d has won.";
     private static final String DRAW_MESSAGE = "Game over: Draw.";
+
+    private static Matcher checkAndPromptInvalidArguments(UserInterface userInterface,
+                                                          Pattern regexPattern, String args) {
+        Matcher result = null;
+        if (Objects.nonNull(args)) {
+            Matcher matcher = regexPattern.matcher(args);
+            if (matcher.matches()) {
+                result = matcher;
+            } else {
+                userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+            }
+        } else {
+            userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
+        }
+        return result;
+    }
 }
