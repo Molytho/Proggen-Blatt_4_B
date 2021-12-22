@@ -6,7 +6,18 @@ import edu.kit.informatik.maumau.ui.CommandManager;
 import edu.kit.informatik.maumau.ui.StdIOInterface;
 import edu.kit.informatik.ui.MainLoop;
 
+/**
+ * Die Main Klasse die die {@link Main#main(String[])} Methode beinhaltet.
+ *
+ * @author urqyv
+ * @version 1.0
+ */
 public abstract class Main {
+    /**
+     * Die main Methode für das MauMau Spiel
+     *
+     * @param args Die an uns übergebenen Argumente.
+     */
     public static void main(String[] args) {
         assert args.length == 0;
 

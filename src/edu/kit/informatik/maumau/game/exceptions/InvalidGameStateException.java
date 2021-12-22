@@ -2,7 +2,8 @@ package edu.kit.informatik.maumau.game.exceptions;
 
 /**
  * Modelliert einen Fehler, der geworfen wird wenn eine Methode ausgeführt werden soll
- * während sich das {@link edu.kit.informatik.maumau.game.Game} in einem nicht für den Aufruf zulässigen Zustand befindet.
+ * während sich das {@link edu.kit.informatik.maumau.game.Game}
+ * in einem nicht für den Aufruf zulässigen Zustand befindet.
  *
  * @author urqyv
  * @version 1.0

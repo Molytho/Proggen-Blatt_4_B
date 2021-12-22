@@ -13,7 +13,6 @@ import edu.kit.informatik.ui.Command;
 import edu.kit.informatik.ui.MainLoop;
 import edu.kit.informatik.ui.UserInterface;
 
-import java.awt.MultipleGradientPaint;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -135,7 +134,7 @@ public enum Commands implements Command<GameControllerInterface> {
                 cardValue = CardValue.fromString(matcher.group(2));
                 cardFamily = CardFamily.fromString(matcher.group(3));
             } catch (NumberFormatException ex) {
-                // Ich hab keine Ahnung wie das passieren sollte. Dann muss das Regex kaputt sein ._.
+                // Ich hab keine Ahnung wie das passieren sollte. Dann muss mein Regex kaputt sein ._.
                 throw new IllegalStateException(ex);
             }
 
