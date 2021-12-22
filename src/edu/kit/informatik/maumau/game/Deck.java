@@ -46,10 +46,11 @@ public final class Deck {
     }
 
     /**
-     * Erstellt einen
+     * Erstellt einen neuen Kartenstapel der alle Karten enthält.
+     * Die Karten werden bei der Hinzufügung gemischt.
      *
-     * @param seed
-     * @return
+     * @param seed Der seed der an den {@link java.util.Random#Random(long)} übergeben wird.
+     * @return Der erstellte Kartenstapel.
      */
     public CardStack createStack(long seed) {
         return new CardStack(cards.clone(), seed);

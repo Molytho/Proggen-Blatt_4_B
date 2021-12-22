@@ -10,10 +10,22 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * Modelliert einen Spieler im MauMau Spiel
+ *
+ * @author urqyv
+ * @version 1.0
+ */
 public class Player implements Iterable<Card> {
     private final Game gameController;
     private final SortedSet<Card> cardsOnHand;
 
+    /**
+     * Instanziiert einen neuen Spieler. Er wird mit einer Starthand instanziiert.
+     *
+     * @param gameController Das Spiel in dem der Spieler spielt.
+     * @param initialCards Die Karten die der Spieler auf die Hand bekommt.
+     */
     Player(Game gameController, Card[] initialCards) {
         this.gameController = gameController;
         cardsOnHand = new TreeSet<>(Arrays.asList(initialCards));
@@ -25,6 +37,14 @@ public class Player implements Iterable<Card> {
         }
     }
 
+    /**
+     * Wirft wenn möglich eine Karte auf den Ablagestapel ab.
+     *
+     * @param card Die Karte die abgeworfen werden soll.
+     * @throws InvalidGameStateException wird geworfen, denn das Spiel nicht läuft.
+     * @throws RuleException wird geworfen, wenn eine Regelverletzung wie z.B. die Karte ist nicht mit der Karte
+     *                       auf dem Ablagestapel kompatibel vorliegt.
+     */
     void doDiscard(Card card) throws InvalidGameStateException, RuleException {
         Objects.requireNonNull(card);
         if (!cardsOnHand.contains(card)) {
@@ -40,6 +60,13 @@ public class Player implements Iterable<Card> {
         reportWonIfNeeded();
     }
 
+    /**
+     * Zieht eine Karte vom Aufnahmestapel.
+     * Dies ist nur möglich, wenn man keine Karte legen kann.
+     *
+     * @throws InvalidGameStateException wird geworfen, denn das Spiel nicht läuft.
+     * @throws RuleException wird geworfen, wenn eine Karte abgeworfen werden kann.
+     */
     void doDraw() throws InvalidGameStateException, RuleException {
         Card currentCard = gameController.getCurrentCard();
         for (Card card : this) {
@@ -51,6 +78,11 @@ public class Player implements Iterable<Card> {
         cardsOnHand.add(gameController.draw());
     }
 
+    /**
+     * Gibt ein Nur-Lesen SortedSet für die Karten die der Spieler auf der Hand hat zurück.
+     *
+     * @return Ein SortedSet der Karten die der Spieler auf der Hand hat
+     */
     public SortedSet<Card> getCardsOnHand() {
         return Collections.unmodifiableSortedSet(cardsOnHand);
     }

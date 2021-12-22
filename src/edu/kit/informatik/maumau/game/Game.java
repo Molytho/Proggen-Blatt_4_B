@@ -5,6 +5,12 @@ import edu.kit.informatik.maumau.game.exceptions.RuleException;
 
 import java.util.Objects;
 
+/**
+ * Eine {@link GameControllerInterface} Implementation.
+ *
+ * @author urqyv
+ * @version 1.0
+ */
 public class Game implements GameControllerInterface {
     private static final int COUNT_OF_PLAYERS = 4;
     private static final int COUNT_OF_INITIAL_CARDS = 5;
@@ -15,6 +21,10 @@ public class Game implements GameControllerInterface {
     private CardStack discardStack;
     private int currentPlayer;
 
+    /**
+     * Instanziiert ein neues Game Objekt.
+     * Es befindet sich am Anfang im {@link GameState#NOT_RUNNING} Zustand.
+     */
     public Game() {
         state = GameState.NOT_RUNNING;
     }
@@ -42,6 +52,11 @@ public class Game implements GameControllerInterface {
         }
     }
 
+    /**
+     * Zieht eine Karte vom Aufnahmestapel und gibt sie zurück.
+     *
+     * @return Die Karte die gezogen wurde.
+     */
     Card draw() {
         Card drawnCard = cardStack.pop();
 
@@ -52,10 +67,18 @@ public class Game implements GameControllerInterface {
         return drawnCard;
     }
 
+    /**
+     * Legt eine Karte auf den Ablagestapel.
+     *
+     * @param card Die Karte die abgelegt werden soll.
+     */
     void discardCard(Card card) {
         discardStack.push(card);
     }
 
+    /**
+     * Registriert den Sieg eines Spielers.
+     */
     void reportWon() {
         this.state = GameState.WON;
     }
