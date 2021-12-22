@@ -13,6 +13,7 @@ import edu.kit.informatik.ui.Command;
 import edu.kit.informatik.ui.MainLoop;
 import edu.kit.informatik.ui.UserInterface;
 
+import java.awt.MultipleGradientPaint;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +47,7 @@ public enum Commands implements Command<GameControllerInterface> {
         }
     },
     SHOW {
-        private static final String REGEX_STRING = "^(game|[1-4])$";
+        private static final String REGEX_STRING = "^game|[1-4]$";
         private final Pattern regexPattern = Pattern.compile(REGEX_STRING);
 
         private boolean executeGameSubcommand(UserInterface userInterface,
@@ -67,7 +68,7 @@ public enum Commands implements Command<GameControllerInterface> {
         private boolean executeDefault(UserInterface userInterface,
                                        GameControllerInterface game, Matcher argumentMatcher) {
             try {
-                int playerId = Integer.parseInt(argumentMatcher.group(1));
+                int playerId = Integer.parseInt(argumentMatcher.group(0));
                 Player player = game.getPlayerWithId(playerId);
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -98,7 +99,7 @@ public enum Commands implements Command<GameControllerInterface> {
                 userInterface.printOutput(INVALID_ARGUMENT_FORMAT);
                 return false;
             }
-            String firstArgument = matcher.group(1);
+            String firstArgument = matcher.group(0);
 
             boolean returnValue;
             switch (firstArgument) {
